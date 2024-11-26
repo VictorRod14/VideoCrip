@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulação de Criptografia</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #d3d3d3; /* Fundo acinzentado */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header-container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #4a90e2;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            color: #4a4a4a;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* Proporção 16:9 */
+        }
+
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .encrypted-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            border-radius: 10px;
+            z-index: 2; /* Apenas sobrepõe o vídeo */
+        }
+
+        .password-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .password-container input {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .password-container button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .password-container button:hover {
+            background-color: #357ab7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <!-- Cabeçalho -->
+        <div class="header-container">
+            <h1>Simulação de Criptografia</h1>
+            <div id="timer" class="timer">Tempo restante: 10 segundos</div>
+        </div>
+
+        <!-- Container do Vídeo -->
+        <div class="video-container">
+            <video id="video" controls autoplay>
+                <source src="midia/videoteste.mp4" type="video/mp4">
+                Seu navegador não suporta o elemento de vídeo.
+            </video>
+            <div id="encrypted-overlay" class="encrypted-overlay">O vídeo foi criptografado.</div>
+        </div>
+
+        <!-- Container da Senha -->
+        <div id="password-container" class="password-container">
+            <input type="password" id="password" placeholder="Digite a senha">
+            <button onclick="decryptVideo()">Descriptografar</button>
+        </div>
+    </div>
+
+    <script>
+        let video = document.getElementById("video");
+        let encryptedOverlay = document.getElementById("encrypted-overlay");
+        let passwordContainer = document.getElementById("password-container");
+        let passwordField = document.getElementById("password");
+        let timerElement = document.getElementById("timer");
+        let countdown = 10; // Tempo restante para criptografar o vídeo
+
+        // Atualiza o contador de tempo
+        const updateTimer = setInterval(() => {
+            if (countdown > 0) {
+                countdown--;
+                timerElement.textContent = `Tempo restante: ${countdown} segundos`;
+            }
+        }, 1000);
+
+        // Criptografa o vídeo após 10 segundos
+        setTimeout(() => {
+            encryptVideo();
+        }, 10000);
+
+        // Função para criptografar o vídeo
+        function encryptVideo() {
+            clearInterval(updateTimer); // Para o contador
+            timerElement.textContent = "O vídeo está criptografado."; // Atualiza a mensagem
+            video.pause(); // Pausa o vídeo
+            encryptedOverlay.style.visibility = "visible"; // Mostra a camada de criptografia
+            passwordField.focus(); // Foca automaticamente no campo de senha
+        }
+
+        // Função para descriptografar o vídeo
+        function decryptVideo() {
+            const correctPassword = "12345"; // Defina a senha correta
+
+            if (passwordField.value === correctPassword) {
+                encryptedOverlay.style.visibility = "hidden"; // Esconde a camada de criptografia
+                passwordField.value = ""; // Limpa o campo de senha
+                video.play(); // Retoma a reprodução do vídeo
+                timerElement.textContent = ""; // Remove a mensagem do timer
+            } else {
+                alert("Senha incorreta! Tente novamente.");
+            }
+        }
+    </script>
+
+</body>
+</html>
